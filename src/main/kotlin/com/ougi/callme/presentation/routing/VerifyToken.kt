@@ -11,13 +11,11 @@ import org.koin.ktor.ext.inject
 
 fun Route.verifyToken() {
     val verifyTokenUseCase by inject<VerifyTokenUseCase>()
-    route("verify") {
-        handle {
-            val token = call.receive<VerifyTokenRequest>().accessToken
-            when (verifyTokenUseCase.verifyAccessToken(token)) {
-                true -> HttpStatusCode.OK to "Token verified"
-                false -> HttpStatusCode.Unauthorized to "Token not verified"
-            }.let { (status, message) -> call.respond(status, message) }
-        }
+    post("verify") {
+        val token = call.receive<VerifyTokenRequest>().accessToken
+        when (verifyTokenUseCase.verifyAccessToken(token)) {
+            true -> HttpStatusCode.OK to "Token verified"
+            false -> HttpStatusCode.Unauthorized to "Token not verified"
+        }.let { (status, message) -> call.respond(status, message) }
     }
 }

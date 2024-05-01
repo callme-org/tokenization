@@ -11,14 +11,12 @@ import org.koin.ktor.ext.inject
 
 fun Route.createToken() {
     val generateTokenUseCase by inject<GenerateTokenUseCase>()
-    route("/create") {
-        handle {
-            val claim = call.receive<CreateTokenRequest>().claim
-            val token = generateTokenUseCase.generateToken(claim)
-            call.respond(
-                status = HttpStatusCode.OK,
-                message = token
-            )
-        }
+    post("/create") {
+        val claim = call.receive<CreateTokenRequest>().claim
+        val token = generateTokenUseCase.generateToken(claim)
+        call.respond(
+            status = HttpStatusCode.OK,
+            message = token
+        )
     }
 }

@@ -11,17 +11,15 @@ import org.koin.ktor.ext.inject
 
 fun Route.refreshToken() {
     val refreshTokenUseCase by inject<RefreshTokenUseCase>()
-    route("/refresh") {
-        handle {
-            val request = call.receive<RefreshTokenRequest>()
-            val newToken = refreshTokenUseCase.refreshToken(
-                token = request.refreshToken,
-                claim = request.claim
-            )
-            call.respond(
-                status = HttpStatusCode.OK,
-                message = newToken
-            )
-        }
+    post("/refresh") {
+        val request = call.receive<RefreshTokenRequest>()
+        val newToken = refreshTokenUseCase.refreshToken(
+            token = request.refreshToken,
+            claimParamName = request.claim
+        )
+        call.respond(
+            status = HttpStatusCode.OK,
+            message = newToken
+        )
     }
 }
